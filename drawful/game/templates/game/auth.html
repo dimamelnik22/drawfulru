@@ -1,0 +1,9 @@
+{% load socialaccount %}
+{% providers_media_js %}
+<head>
+	<title>Google registration</title>
+		<meta http-equiv="refresh" content="5" />
+</head>
+<body>
+	<a href="{% provider_login_url "google" %}">Google connect</a>
+</body>
