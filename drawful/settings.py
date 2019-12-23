@@ -25,7 +25,7 @@ SECRET_KEY = '(wx#e&2uclycv$ll+q_xu5c0pw2_(yo54b@ra$emksi7v6!x+e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['drawfulru.herokuapp.com']
 
 
 # Application definition
