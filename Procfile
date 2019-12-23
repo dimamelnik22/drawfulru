@@ -1,1 +1,1 @@
-web: gunicorn drawfulru.wsgi
+web: gunicorn drawful.wsgi
