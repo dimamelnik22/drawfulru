@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'game.apps.GameConfig',
     'user_profile.apps.UserProfileConfig',
-	'project',
+
 
     'allauth',
     'allauth.account',
