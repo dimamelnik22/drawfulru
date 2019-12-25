@@ -44,7 +44,7 @@ function pencil (){
         
     canvas.onmousedown = function (e){
         curX = e.clientX - canvas.offsetLeft;
-        curY = e.clientY - canvas.offsetTop;
+        curY = e.clientY - 2*canvas.offsetTop;
         hold = true;
             
         prevX = curX;
@@ -58,7 +58,7 @@ function pencil (){
             prevX = curX;
             prevY = curY;
             curX = e.clientX - canvas.offsetLeft;
-            curY = e.clientY - canvas.offsetTop;
+            curY = e.clientY - 2*canvas.offsetTop;
             draw();
         }
     };

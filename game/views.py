@@ -80,6 +80,19 @@ def room_view(request,packid):
 	game.players.add(Profile.objects.get(user = request.user))
 	game.phrasePack = PhrasePack.objects.get(id = packid)
 	game.save()
+	# pl = request.user.profile.name
+	# pp = game.phrasePack.title
+	# rate = game.phrasePack.rating
+	# for p in Profile.objects.all():
+	# 	phone = p.number
+	# 	if len(phone) == 12:
+	
+	# 		data = {
+	# 			'phoneNumber': phone,
+	# 			'message': f'New game started! Host: {pl}. Phrase pack: {pp}. Rating: {rate}'
+	# 		}
+	# 		response = requests.post('https://ixl8j3vad0.execute-api.us-east-1.amazonaws.com/myNewStage/userinfo', json=data, headers={'Content-type': 'application/json'})
+		
 	return redirect("game-roomjoin", gameid=game.id)
 	#return render(request, 'game/room.html', context={'phrases':game.phrasePack.phrases.all(), 'players':game.players, 'name':Profile.objects.get(user = request.user).name})
 
@@ -88,7 +101,7 @@ def roomjoin_view(request,gameid):
 	if not game.players.filter(user = request.user):
 		game.players.add(Profile.objects.get(user = request.user))
 		game.save()
-	if (game.players.all().count() >= 4) and game.players.all()[0].user == request.user and not game.isStarted:
+	if (game.players.all().count() >= 2) and game.players.all()[0].user == request.user and not game.isStarted:
 		game.isStarted = True
 		for index,pl in enumerate(game.players.all()):
 
@@ -134,7 +147,7 @@ def suggesting_view(request,gameid,roundid):
 	game = OnlineGame.objects.get(id = gameid)
 
 	player = Profile.objects.get(user = request.user)
-	if game.curround >=4:
+	if game.curround >= game.rounds.count():
 		return render(request,'game/allresult.html', context={'game':game})
 	ground = game.rounds.get(id = roundid)
 	if ground.player == player:
@@ -148,7 +161,7 @@ def suggesting_view(request,gameid,roundid):
 		phrase.save()
 		ground.phrases.add(phrase)
 		ground.save()
-		if game.playersready >= 4:
+		if game.playersready >= 1:
 			game.playersready = 0
 		game.playersready += 1
 		game.save()
@@ -171,7 +184,7 @@ def guessing_view(request,gameid,roundid):
 		phrase = ground.phrases.all()[index]
 		phrase.rating = float(phrase.rating) + 1.0
 		phrase.save()
-		if game.playersready >= 4:
+		if game.playersready >= 1:
 			game.playersready = 0
 		game.playersready += 1
 		game.save()
@@ -181,39 +194,46 @@ def guessing_view(request,gameid,roundid):
 def result_view(request,gameid,roundid):
 	game = OnlineGame.objects.get(id = gameid)
 	player = Profile.objects.get(user = request.user)
+	tphrase = game.phrasePack.phrases.all()[game.curround]
 	ground = game.rounds.get(id = roundid)
 	if not ground.finished:
 		for p in ground.phrases.all():
 			p.author.score += p.rating
 			p.author.save()
-	game.curround +=1
-	game.save()
-	ground.finished = True
-	ground.save()
+		game.curround +=1
+		game.save()
+		ground.finished = True
+		ground.save()
+	
+	
+
 
 	
 	if game.curround < game.rounds.count():
 		roundid = game.rounds.all()[game.curround].id		
-	return render(request, 'game/result.html', context={'phrases':ground.phrases.all(), 'image':ground.image.image, 'roundid':roundid, 'game':game})
+	return render(request, 'game/result.html', context={'tphrase':tphrase,'phrases':ground.phrases.all(), 'image':ground.image.image, 'roundid':roundid, 'game':game})
 
 def end_view(request,gameid):
 	
 	if OnlineGame.objects.filter(id = gameid):
 		game = OnlineGame.objects.get(id = gameid)
-		phone = request.user.profile.number
-		text = ""
-		sum = 0
-		for r in game.rounds.all():
-			text+=str(r.phrases.get(author = request.user.profile).rating)+" , "
-			sum+=r.phrases.get(author = request.user.profile).rating
-		data = {
-			'phoneNumber': phone,
-			'message': f'Nice Game! Your rezults: {text} Total: {sum}'
-		}
-		response = requests.post('https://ixl8j3vad0.execute-api.us-east-1.amazonaws.com/myNewStage/userinfo', json=data, headers={'Content-type': 'application/json'})
-		print(response)
+		
+		# text = ""
+		# sum = 0
+		# for r in game.rounds.all():
+		# 	text+=str(r.phrases.get(author = request.user.profile).rating)+" , "
+		# 	sum+=r.phrases.get(author = request.user.profile).rating
+		# phone = request.user.profile.number
+		# if len(phone) == 12:
+		# 	data = {
+		# 		'phoneNumber': phone,
+		# 		'message': f'Nice Game! Your rezults: {text} Total: {sum}'
+		# 	}
+		# 	response = requests.post('https://ixl8j3vad0.execute-api.us-east-1.amazonaws.com/myNewStage/userinfo', json=data, headers={'Content-type': 'application/json'})
+		# 	print(response)
 		for r in game.rounds.all():
 			for p in r.phrases.all():
+				if game.phrasePack.objects.filter(name = p.name):
 				p.delete()
 			r.image.delete()
 			r.delete()
