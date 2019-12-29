@@ -256,3 +256,8 @@ function save (gameid){
     alert(filename + " saved");
     
 } 
+
+function ready (playerid, gameid, roundid, next){
+    $.post("/room/"+gameid+"/wait/"+roundid+"/"+next, { pl_id: playerid});
+    alert(playerid + " saved");
+}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Phrase, PhrasePack, PlayedGame, OnlineGame, Image, Round
+from .models import Phrase, PhrasePack, PlayedGame, OnlineGame, Image, Round, PlayersChoice, PlayersNewPhrase
 
 
 
@@ -15,3 +15,7 @@ admin.site.register(OnlineGame)
 admin.site.register(Round)
 
 admin.site.register(Image)
+
+admin.site.register(PlayersChoice)
+
+admin.site.register(PlayersNewPhrase)

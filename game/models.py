@@ -43,6 +43,15 @@ class Round(models.Model):
 	finished = models.BooleanField(default=False)	
 	phrases = models.ManyToManyField(Phrase)
 
+class PlayersChoice(models.Model):
+	player = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+	chosenPhrase = models.ForeignKey(Phrase, on_delete=models.CASCADE)
+	ground = models.ForeignKey(Round, on_delete=models.CASCADE)
+
+class PlayersNewPhrase(models.Model):
+	player = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+	newPhrase = models.ForeignKey(Phrase, on_delete=models.CASCADE)
+	ground = models.ForeignKey(Round, on_delete=models.CASCADE)
 
 class OnlineGame(models.Model):
 	players = models.ManyToManyField(Profile)
@@ -50,7 +59,7 @@ class OnlineGame(models.Model):
 	isStarted = models.BooleanField(default=False)
 	rounds = models.ManyToManyField(Round)
 	curround = models.IntegerField(default = 0)
-	playersready = models.IntegerField(default = 0)
+	playersready = models.BooleanField(default = False)
 
 
 

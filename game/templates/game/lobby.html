@@ -1,6 +1,6 @@
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<meta http-equiv="refresh" content="15; url=/room/{{game.id}}/suggest/{{rounds.first.id}}" />
+	<meta http-equiv="refresh" content="15; url=/room/{{game.id}}/wait/{{roundid}}/suggest" />
 
 </head>
 
@@ -35,7 +35,7 @@
 			    	save('{{game.id}}')
 			        
 			    } 
-			    document.write("You will be redirected to a new page in 15 seconds"); 
+			    
 			    setTimeout('Redirect()', 14000);   
 			</script>
 			</div>
